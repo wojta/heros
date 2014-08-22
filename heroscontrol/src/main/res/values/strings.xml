@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">heros-control</string>
+    <string name="firstOS">Laura OS</string>
+    <string name="secondOS">Robert OS</string>
+    <string name="blank">Černá obrazovka</string>
+    <string name="instalace">Instalace</string>
+    <string name="selectID">&#8230;</string>
+    <string name="ok">OK</string>
+    <string name="enter_ip">Zadejte IP adresu serveru</string>
+</resources>

@@ -1,0 +1,2 @@
+include ':app', ':heros-main'
+include ':heroscontrol'

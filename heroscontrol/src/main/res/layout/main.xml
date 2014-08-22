@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+        >
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:id="@+id/llOSSelect">
+    <Button
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/firstOS"
+            android:id="@+id/btPrvniOS"
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="0dp"/>
+    <Button
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/secondOS"
+            android:id="@+id/btDruheOS"
+            android:layout_marginTop="0dp"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="100dp"
+            android:layout_below="@+id/llOSSelect"
+            android:focusableInTouchMode="false"
+            android:id="@+id/linearLayout">
+
+        <Button
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/instalace"
+                android:id="@+id/btInstall"
+                android:layout_gravity="center_vertical"/>
+        <Button
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/blank"
+                android:id="@+id/btBlank"
+                android:layout_gravity="center_vertical"/>
+    </LinearLayout>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="&lt;no id yet selected&gt;"
+            android:id="@+id/txId"
+            android:layout_below="@+id/linearLayout"
+            android:layout_centerHorizontal="true"/>
+</RelativeLayout>
+

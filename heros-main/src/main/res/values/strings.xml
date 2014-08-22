@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">heros</string>
+    <string name="pleaseWait">Prosím čekejte, váš OS se připravuje...</string>
+</resources>

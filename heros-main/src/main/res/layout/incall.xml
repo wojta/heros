@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AbsoluteLayout
+android:id="@+id/top_lvl_layout"
+android:layout_width="fill_parent"
+android:layout_height="fill_parent"
+android:background="#000000"
+xmlns:android="http://schemas.android.com/apk/res/android"
+>
+
+
+    <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/rlOSMain"
+            android:background="#FDD">
+
+        <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/ivBackground"
+                android:src="@drawable/pastel_background"
+                android:scaleType="fitXY"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0.0.0.0"
+            android:id="@+id/tvIP"
+            android:layout_alignParentEnd="true"
+            android:textColor="#FFF"/>
+
+        <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:visibility="gone">
+
+            <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/circle"
+
+                    android:id="@+id/ivCircle"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center"/>
+        </FrameLayout>
+
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:id="@+id/linearLayout"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="45dp">
+
+        </LinearLayout>
+
+        <view
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                class="cz.sazel.android.heros.view.TextViewFontAlexbrush"
+                android:id="@+id/tvName"
+                android:text="Laura"
+                android:textColor="#FFF"
+                android:textSize="100sp"
+                android:textAlignment="center"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/rlOSInstall"
+            android:background="@android:color/transparent"
+            android:visibility="gone">
+
+        <ProgressBar
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:id="@+id/progressBar"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="48dp"
+                android:layout_marginRight="48dp"
+                />
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/pleaseWait"
+                android:id="@+id/textView2"
+                android:layout_above="@+id/progressBar"
+                android:layout_centerHorizontal="true"
+                android:lines="2"
+                android:layout_marginLeft="48dp"
+                android:layout_marginRight="48dp"
+                android:layout_marginBottom="16dp"
+                android:gravity="center"/>
+
+    </RelativeLayout>
+
+</AbsoluteLayout>
