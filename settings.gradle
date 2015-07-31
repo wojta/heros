@@ -1,2 +1,2 @@
-include ':app', ':heros-main'
+include ':heros-main'
 include ':heroscontrol'

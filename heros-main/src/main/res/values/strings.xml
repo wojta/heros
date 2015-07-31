@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="OS">Operating system</string>
     <string name="app_name">heros</string>
-    <string name="pleaseWait">Prosím čekejte, váš OS se připravuje...</string>
+    <string name="mustHaveQRCodeReader">ZXING compatibile QR code reader is required.</string>
+    <string name="pleaseWait">Please wait, your OS is being perpared…</string>
 </resources>

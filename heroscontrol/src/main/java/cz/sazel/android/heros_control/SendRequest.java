@@ -17,9 +17,9 @@ import javax.net.ssl.HttpsURLConnection;
 public class SendRequest {
 
 
-    private final SelectIdActivity.Id mId;
+    private final Id mId;
 
-    public SendRequest(SelectIdActivity.Id id) {
+    public SendRequest(Id id) {
         mId = id;
     }
 

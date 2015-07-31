@@ -22,7 +22,6 @@ public class ServerService extends Service {
     private static final String TAG = ServerService.class.getSimpleName();
     private ServerThread mServerThread;
 
-
     public ServerService() {
 
     }
@@ -32,10 +31,12 @@ public class ServerService extends Service {
         private boolean mRunning;
 
         public void close() {
-            if (mSocket!=null) try {
-                mSocket.close();
-            } catch (IOException e) {
-                e.printStackTrace();
+            if (mSocket != null) {
+                try {
+                    mSocket.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
 
@@ -46,18 +47,31 @@ public class ServerService extends Service {
             try {
                 mSocket = new ServerSocket(12345);
                 while (mRunning) {
-                    Socket mClientSocket = mSocket.accept();
-                    BufferedReader br = new BufferedReader(new InputStreamReader(mClientSocket.getInputStream()));
-                    String line;
-                    while (mRunning && (line = br.readLine()) != null) {
-                        try {
-                            parseLine(line);
-                        } catch (JSONException e) {
-                            Log.e(TAG,"invalid JSON: "+line);
+                    final Socket mClientSocket = mSocket.accept();
+                    Thread t = new Thread(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            try {
+                                BufferedReader br =
+                                        new BufferedReader(new InputStreamReader(mClientSocket.getInputStream()));
+                                String line;
+
+                                while (mRunning && (line = br.readLine()) != null) {
+                                    try {
+                                        parseLine(line);
+                                    } catch (JSONException e) {
+                                        Log.e(TAG, "invalid JSON: " + line);
+                                    }
+                                }
+                                br.close();
+                                mClientSocket.close();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         }
-                    }
-                    br.close();
-                    mClientSocket.close();
+                    });
+                    t.start();
                 }
                 mSocket.close();
             } catch (Exception e) {
@@ -72,9 +86,11 @@ public class ServerService extends Service {
             intent.putExtra(GcmBroadcastReceiver.MSG_TYPE, msgType);
             if (GcmBroadcastReceiver.CHANGE_OS_REQUEST.equals(msgType)) {
                 intent.putExtra(GcmBroadcastReceiver.NAME, jsonObject.getString(GcmBroadcastReceiver.NAME));
-                intent.putExtra(GcmBroadcastReceiver.COLOR_VARIANT, jsonObject.getString(GcmBroadcastReceiver.COLOR_VARIANT));
+                intent.putExtra(GcmBroadcastReceiver.COLOR_VARIANT,
+                        jsonObject.getString(GcmBroadcastReceiver.COLOR_VARIANT));
             } else if (GcmBroadcastReceiver.OTHER_REQUEST.equals(msgType)) {
-                intent.putExtra(GcmBroadcastReceiver.OTHER_EVENT, jsonObject.getString(GcmBroadcastReceiver.OTHER_EVENT));
+                intent.putExtra(GcmBroadcastReceiver.OTHER_EVENT,
+                        jsonObject.getString(GcmBroadcastReceiver.OTHER_EVENT));
             }
             sendBroadcast(intent);
         }
@@ -95,7 +111,9 @@ public class ServerService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (ACTION_START.equals(intent.getAction())) {
-            if (mServerThread == null) mServerThread = new ServerThread();
+            if (mServerThread == null) {
+                mServerThread = new ServerThread();
+            }
             mServerThread.start();
             Log.d(TAG, "listening thread started");
         }

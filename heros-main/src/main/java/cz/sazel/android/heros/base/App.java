@@ -16,201 +16,218 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.squareup.otto.Bus;
+import com.squareup.otto.ThreadEnforcer;
+import cz.sazel.android.heros.event.GCMConnectedEvent;
+import cz.sazel.android.heros_control.Id;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
-
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by wojta on 27.4.14.
  */
 public class App extends Application {
 
-    private static final String SENDER_ID = "644662548442";
-    static Bus sBus;
-    private static Handler sHandler;
-    private String sRegid;
-    private GoogleCloudMessaging sGcm;
-    public static final String TAG = App.class.getSimpleName();
+	public static final String TAG = App.class.getSimpleName();
+	public static final String EXTRA_MESSAGE = "message";
+	public static final String PROPERTY_REG_ID = "registration_id";
+	private static final String SENDER_ID = "644662548442";
+	private static final String PROPERTY_REG_DATE = "registration_date";
+	private static final String PROPERTY_APP_VERSION = "appVersion";
+	private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+	static Bus sBus;
+	private static Handler sHandler;
+	private static Id sRegid;
+	private static GoogleCloudMessaging sGcm;
+	private String PROPERTY_REG_NAME="registration_name";
 
-    public static final String EXTRA_MESSAGE = "message";
-    public static final String PROPERTY_REG_ID = "registration_id";
-    private static final String PROPERTY_APP_VERSION = "appVersion";
-    private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+	public static Id getRegid() {
+		return sRegid;
+	}
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        sBus = new Bus();
-        sBus.register(this);
-        sHandler = new Handler();
-        if (!checkPlayServices()) {
-            Log.e("App", "GooglePlayServices failed");
-            System.exit(1);
-        } else {
-            sGcm = GoogleCloudMessaging.getInstance(this);
-            sRegid = getRegistrationId(this);
+	public static Bus bus() {
+		return sBus;
+	}
 
-            if (sRegid.isEmpty()) {
-                registerInBackground();
-            } else {
-                Log.v(TAG, "registrationId:" + sRegid);
-            }
-        }
-    }
+	public static void postBus(final Object event) {
+		sHandler.post(new Runnable() {
 
+			@Override
+			public void run() {
+				sBus.post(event);
+			}
+		});
+	}
 
-    public static Bus bus() {
-        return sBus;
-    }
+	/**
+	 * @return Application's version code from the {@code PackageManager}.
+	 */
 
-    public static void postBus(final Object event) {
-        sHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                sBus.post(event);
-            }
-        });
-    }
+	private static int getAppVersion(Context context) {
+		try {
 
-    private boolean checkPlayServices() {
-        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
-        if (resultCode != ConnectionResult.SUCCESS) {
-            return false;
-        }
-        return true;
-    }
+			PackageInfo packageInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+			return packageInfo.versionCode;
+		} catch (PackageManager.NameNotFoundException e) {
+			throw new RuntimeException("Could not get package name: " + e);
+		}
+	}
 
-    private String getRegistrationId(Context context) {
-        final SharedPreferences prefs = getGCMPreferences(context);
-        final String registrationId = prefs.getString(PROPERTY_REG_ID, "");
+	@Override
+	public void onCreate() {
+		super.onCreate();
+		sBus = new Bus(ThreadEnforcer.ANY);
 
-        if (registrationId.isEmpty())
+		sBus.register(this);
+		sHandler = new Handler();
+		if (!checkPlayServices()) {
+			Log.e("App", "GooglePlayServices failed");
+			System.exit(1);
+		} else {
+			sGcm = GoogleCloudMessaging.getInstance(this);
+			sRegid = getRegistrationId(this);
 
-        {
-            Log.i(TAG, "Registration not found.");
-            return "";
-        }
+		}
+	}
 
-        // Check if app was updated; if so, it must clear the registration ID
-        // since the existing regID is not guaranteed to work with the new
-        // app version.
-        int registeredVersion = prefs.getInt(PROPERTY_APP_VERSION, Integer.MIN_VALUE);
-        int currentVersion = getAppVersion(context);
-        if (registeredVersion != currentVersion)
+	private boolean checkPlayServices() {
+		int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+		if (resultCode != ConnectionResult.SUCCESS) {
+			return false;
+		}
+		return true;
+	}
 
-        {
-            Log.i(TAG, "App version changed.");
-            return "";
-        }
+	public Id getRegistrationId(Context context) {
+		final SharedPreferences prefs = getGCMPreferences(context);
+		final String registrationId = prefs.getString(PROPERTY_REG_ID, "");
+		final String registrationName = prefs.getString(PROPERTY_REG_NAME, "");
+		final long registrationDate = prefs.getLong(PROPERTY_REG_DATE, 0);
 
-        return registrationId;
-    }
+		Date date = new Date(registrationDate);
+		if (registrationId.isEmpty())
 
-    private SharedPreferences getGCMPreferences(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context);
-    }
+		{
+			Log.i(TAG, "Registration not found.");
+			return null;
+		}
+		Calendar cal1 = Calendar.getInstance();
+		Calendar cal2 = Calendar.getInstance();
+		cal1.setTime(date);
+		cal2.setTime(new Date());
+		boolean sameDay = cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) && cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR);
+		if (!sameDay) {
+			Log.w(TAG, "Registration found but old.");
+			return null;
+		}
 
+		// Check if app was updated; if so, it must clear the registration ID
+		// since the existing regID is not guaranteed to work with the new
+		// app version.
+		int registeredVersion = prefs.getInt(PROPERTY_APP_VERSION, Integer.MIN_VALUE);
+		int currentVersion = getAppVersion(context);
+		if (registeredVersion != currentVersion)
 
-    private void registerInBackground() {
-        new AsyncTask<Void, Void, String>() {
-            @Override
-            protected String doInBackground(Void... params) {
-                String msg = "";
-                if (sGcm == null) {
-                    sGcm = GoogleCloudMessaging.getInstance(App.this);
-                }
-                try {
-                    sRegid = sGcm.register(SENDER_ID);
-                    msg = "Device registered, registration ID=" + sRegid;
-                    storeRegistrationId(App.this, sRegid);
-                    try {
-                        Uri.Builder builder = Uri.parse(Constants.REG_IDS_URL).buildUpon();
-                        builder.appendQueryParameter("id", sRegid);
-                        builder.appendQueryParameter("info", Build.MODEL + ":" + Settings.Secure.getString(getContentResolver(),
-                                Settings.Secure.ANDROID_ID));
+		{
+			Log.i(TAG, "App version changed.");
+			return null;
+		}
 
-                        URL url = new URL(builder.build().toString());
+		return new Id(registrationId,registrationName);
+	}
 
-                        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                        try {
+	private SharedPreferences getGCMPreferences(Context context) {
+		return PreferenceManager.getDefaultSharedPreferences(context);
+	}
 
-                            connection.setRequestMethod("GET");
-                            connection.setDoOutput(true);
-                            connection.setReadTimeout(10000);
-                            connection.connect();
-                            if (connection.getResponseCode() == 200) {
-                                Log.v(TAG, "sucessfully written regid");
-                            } else {
-                                Log.e(TAG, "regid failed");
-                            }
-                        } catch (ProtocolException e) {
-                            e.printStackTrace();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } finally {
-                            connection.disconnect();
-                        }
-                    } catch (MalformedURLException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+	public void registerInBackground() {
+		new AsyncTask<Void, Void, String>() {
 
+			@Override
+			protected String doInBackground(Void... params) {
+				String msg = "";
+				if (sGcm == null) {
+					sGcm = GoogleCloudMessaging.getInstance(App.this);
+				}
+				try {
+					String id = sGcm.register(SENDER_ID);
+					msg = "Device registered, registration ID=" + sRegid;
+					String info = Build.MODEL + ":" + Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+					sRegid = new Id(id, info);
+					storeRegistrationId(App.this, sRegid);
+					try {
+						Uri.Builder builder = Uri.parse(Constants.REG_IDS_URL).buildUpon();
+						builder.appendQueryParameter("id", sRegid.id);
+						builder.appendQueryParameter("info", info);
 
-                } catch (IOException ex)
+						URL url = new URL(builder.build().toString());
 
-                {
-                    msg = "Error :" + ex.getMessage();
-                }
+						HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+						try {
 
-                return msg;
-            }
+							connection.setRequestMethod("GET");
+							connection.setDoOutput(true);
+							connection.setReadTimeout(10000);
+							connection.connect();
+							if (connection.getResponseCode() == 200) {
+								Log.v(TAG, "sucessfully written regid");
+								App.bus().post(new GCMConnectedEvent(sRegid));
+							} else {
+								Log.e(TAG, "regid failed");
+							}
+						} catch (ProtocolException e) {
+							e.printStackTrace();
+						} catch (IOException e) {
+							e.printStackTrace();
+						} finally {
+							connection.disconnect();
+						}
+					} catch (MalformedURLException e) {
+						e.printStackTrace();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 
-            ;
+				} catch (IOException ex)
 
+				{
+					msg = "Error :" + ex.getMessage();
+				}
 
-            @Override
-            protected void onPostExecute(String msg) {
-                Log.v(TAG, msg);
-            }
-        }.execute(null, null, null);
+				return msg;
+			}
 
-    }
+			;
 
+			@Override
+			protected void onPostExecute(String msg) {
+				Log.v(TAG, msg);
+			}
+		}.execute(null, null, null);
 
-    /**
-     * @return Application's version code from the {@code PackageManager}.
-     */
+	}
 
-    private static int getAppVersion(Context context) {
-        try {
-
-            PackageInfo packageInfo = context.getPackageManager()
-                    .getPackageInfo(context.getPackageName(), 0);
-            return packageInfo.versionCode;
-        } catch (PackageManager.NameNotFoundException e) {
-            throw new RuntimeException("Could not get package name: " + e);
-        }
-    }
-
-    /**
-     * Stores the registration ID and app versionCode in the application's
-     * {@code SharedPreferences}.
-     *
-     * @param context application's context.
-     * @param regId   registration ID
-     */
-    private void storeRegistrationId(Context context, String regId) {
-        final SharedPreferences prefs = getGCMPreferences(context);
-        int appVersion = getAppVersion(context);
-        Log.i(TAG, "Saving regId on app version " + appVersion);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString(PROPERTY_REG_ID, regId);
-        editor.putInt(PROPERTY_APP_VERSION, appVersion);
-        editor.commit();
-    }
+	/**
+	 * Stores the registration ID and app versionCode in the application's
+	 * {@code SharedPreferences}.
+	 *
+	 * @param context application's context.
+	 * @param id   registration ID
+	 */
+	private void storeRegistrationId(Context context, Id id) {
+		final SharedPreferences prefs = getGCMPreferences(context);
+		int appVersion = getAppVersion(context);
+		Log.i(TAG, "Saving regId on app version " + appVersion);
+		SharedPreferences.Editor editor = prefs.edit();
+		editor.putString(PROPERTY_REG_ID, id.id);
+		editor.putString(PROPERTY_REG_NAME, id.name);
+		editor.putInt(PROPERTY_APP_VERSION, appVersion);
+		editor.putLong(PROPERTY_REG_DATE, new Date().getTime());
+		editor.commit();
+	}
 }

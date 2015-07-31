@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">heros-control</string>
-    <string name="firstOS">Laura OS</string>
+     <string name="firstOS">Laura OS</string>
     <string name="secondOS">Robert OS</string>
-    <string name="blank">Černá obrazovka</string>
-    <string name="instalace">Instalace</string>
+    <string name="blank">Black screen</string>
+    <string name="instalace">Install</string>
     <string name="selectID">&#8230;</string>
     <string name="ok">OK</string>
-    <string name="enter_ip">Zadejte IP adresu serveru</string>
+    <string name="enter_ip">Enter server\'s IP address</string>
+    <string name="OSControl">Operating system - control</string>
+    <string name="installUnolocked">Install unlocked</string>
+    <string name="idMustBeSelected">Id must be selected from Settings first, please click  top right icon for setup.</string>
+    <string name="selectID2">Select ID</string>
 </resources>

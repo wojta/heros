@@ -5,13 +5,18 @@ package cz.sazel.android.heros.event;
  */
 public class OtherEvent {
 
-    public enum EventType { BLANK, INSTALL };
+    public enum EventType {
+        BLANK,
+        INSTALL,
+        KEEPALIVE
+    }
+
+    ;
 
     public EventType eventType;
 
     public OtherEvent(EventType eventType) {
         this.eventType = eventType;
     }
-
 
 }

@@ -28,130 +28,108 @@ import java.util.ArrayList;
  */
 public class SelectIdActivity extends Activity {
 
-    private ArrayList<Id> mList;
-    private ListView lvList;
+	private ArrayList<Id> mList;
+	private ListView lvList;
 
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.select_id);
-        mList=new ArrayList<Id>();
-        lvList=(ListView)findViewById(R.id.lvList);
-        lvList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Id lid= (Id) parent.getAdapter().getItem(position);
-                Intent intent=new Intent();
-                intent.putExtra("id",lid.id);
-                intent.putExtra("name",lid.name);
-                intent.putExtra("ip",lid.isIp());
-                setResult(RESULT_OK,intent);
-                finish();
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.select_id);
+		mList = new ArrayList<Id>();
+		lvList = (ListView) findViewById(R.id.lvList);
+		lvList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-            }
-        });
-        load();
-    }
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				Id lid = (Id) parent.getAdapter().getItem(position);
+				Intent intent = new Intent();
+				intent.putExtra("id", lid.id);
+				intent.putExtra("name", lid.name);
+				intent.putExtra("ip", lid.isIp());
+				setResult(RESULT_OK, intent);
+				finish();
 
-    public static class Id {
-        private boolean ip;
-        public String id;
-        public String name;
+			}
+		});
+		load();
+	}
 
-        private Id(String id, String name) {
-            this.id = id;
-            this.name = name;
-        }
+	private void load() {
+		AsyncTask<Void, Void, Void> atask = new AsyncTask<Void, Void, Void>() {
 
-        public Id(String id, String name,boolean ip) {
-            this.id = id;
-            this.name = name;
-            this.ip=ip;
-        }
+			@Override
+			protected Void doInBackground(Void... params) {
+				try {
+					URL url = new URL(Constants.GET_IDS_URL);
+					HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+					try {
+						urlConnection.setRequestMethod("GET");
+						BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+						String line = "";
+						while ((line = br.readLine()) != null) {
+							String[] pola = line.split(",");
+							if (pola.length == 2) {
+								mList.add(new Id(pola[0], pola[1]));
+							}
+						}
+					} catch (ProtocolException e) {
+						e.printStackTrace();
+					} catch (IOException e) {
+						e.printStackTrace();
+					} finally {
+						urlConnection.disconnect();
+					}
+				} catch (MalformedURLException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				} finally {
 
-        public boolean isIp() {
-            return ip;
-        }
+				}
 
-        @Override
-        public String toString() {
-            return name;
-        }
-    }
+				return null;
+			}
 
-    private void load() {
-        AsyncTask<Void, Void, Void> atask = new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... params) {
-                try {
-                    URL url = new URL(Constants.GET_IDS_URL);
-                    HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-                    try {
-                        urlConnection.setRequestMethod("GET");
-                        BufferedReader br=new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-                        String line="";
-                        while ((line=br.readLine())!=null) {
-                            String[] pola=line.split(",");
-                            if (pola.length==2) mList.add(new Id(pola[0],pola[1]));
-                        }
-                    } catch (ProtocolException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } finally {
-                        urlConnection.disconnect();
-                    }
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
+			@Override
+			protected void onPostExecute(Void aVoid) {
+				super.onPostExecute(aVoid);
+				lvList.setAdapter(new ArrayAdapter<Id>(SelectIdActivity.this, android.R.layout.simple_list_item_1, android.R.id.text1, mList));
+			}
+		};
+		atask.execute();
+	}
 
-                }
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getItemId() == R.id.action_addip) {
+			showEnterIpDialog();
+		}
+		return super.onOptionsItemSelected(item);
+	}
 
+	private void showEnterIpDialog() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		final EditText edIp = new EditText(this);
+		builder.setView(edIp).setMessage(getString(R.string.enter_ip)).setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 
-                return null;
-            }
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				String text = String.valueOf(edIp.getText());
+				mList.add(new Id(text, text, true));
+				((ArrayAdapter)lvList.getAdapter()).notifyDataSetChanged();
+			}
+		});
+		builder.show();
+	}
 
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-                lvList.setAdapter(new ArrayAdapter<Id>(SelectIdActivity.this,android.R.layout.simple_list_item_1,android.R.id.text1,mList));
-            }
-        };
-        atask.execute();
-    }
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+	}
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_addip:
-                showEnterIpDialog();
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.select_id, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
 
-    private void showEnterIpDialog() {
-        AlertDialog.Builder builder=new AlertDialog.Builder(this);
-        final EditText edIp=new EditText(this);
-        builder.setView(edIp).setMessage(getString(R.string.enter_ip)).setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String text = String.valueOf(edIp.getText());
-                mList.add(new Id(text, text,true));
-            }
-        });
-        builder.show();
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.select_id, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
 }
