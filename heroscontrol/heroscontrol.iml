@@ -46,15 +46,14 @@
       <sourceFolder url="file://$USER_HOME$/build/heros/heroscontrol/generated/res/rs/androidTest/debug" type="java-test-resource" />
       <sourceFolder url="file://$USER_HOME$/build/heros/heroscontrol/generated/res/resValues/androidTest/debug" type="java-test-resource" />
       <excludeFolder url="file://$USER_HOME$/build/heros/heroscontrol/intermediates/assets" />
+      <excludeFolder url="file://$USER_HOME$/build/heros/heroscontrol/intermediates/blame" />
       <excludeFolder url="file://$USER_HOME$/build/heros/heroscontrol/intermediates/bundles" />
       <excludeFolder url="file://$USER_HOME$/build/heros/heroscontrol/intermediates/classes" />
       <excludeFolder url="file://$USER_HOME$/build/heros/heroscontrol/intermediates/dependency-cache" />
       <excludeFolder url="file://$USER_HOME$/build/heros/heroscontrol/intermediates/incremental" />
       <excludeFolder url="file://$USER_HOME$/build/heros/heroscontrol/intermediates/jniLibs" />
       <excludeFolder url="file://$USER_HOME$/build/heros/heroscontrol/intermediates/lint" />
-      <excludeFolder url="file://$USER_HOME$/build/heros/heroscontrol/intermediates/manifests" />
       <excludeFolder url="file://$USER_HOME$/build/heros/heroscontrol/intermediates/res" />
-      <excludeFolder url="file://$USER_HOME$/build/heros/heroscontrol/intermediates/resources" />
       <excludeFolder url="file://$USER_HOME$/build/heros/heroscontrol/intermediates/rs" />
       <excludeFolder url="file://$USER_HOME$/build/heros/heroscontrol/intermediates/symbols" />
       <excludeFolder url="file://$USER_HOME$/build/heros/heroscontrol/intermediates/transforms" />
