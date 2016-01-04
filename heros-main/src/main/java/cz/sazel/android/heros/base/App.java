@@ -162,7 +162,7 @@ public class App extends Application {
 					storeRegistrationId(App.this, sRegid);
 					try {
 						Uri.Builder builder = Uri.parse(Constants.REG_IDS_URL).buildUpon();
-						builder.appendQueryParameter("id", sRegid.id);
+						builder.appendQueryParameter("id", sRegid.getId());
 						builder.appendQueryParameter("info", info);
 
 						URL url = new URL(builder.build().toString());
@@ -224,8 +224,8 @@ public class App extends Application {
 		int appVersion = getAppVersion(context);
 		Log.i(TAG, "Saving regId on app version " + appVersion);
 		SharedPreferences.Editor editor = prefs.edit();
-		editor.putString(PROPERTY_REG_ID, id.id);
-		editor.putString(PROPERTY_REG_NAME, id.name);
+		editor.putString(PROPERTY_REG_ID, id.getId());
+		editor.putString(PROPERTY_REG_NAME, id.getName());
 		editor.putInt(PROPERTY_APP_VERSION, appVersion);
 		editor.putLong(PROPERTY_REG_DATE, new Date().getTime());
 		editor.commit();

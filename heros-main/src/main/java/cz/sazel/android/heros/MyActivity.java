@@ -96,8 +96,10 @@ public class MyActivity extends Activity {
 					@Override
 					public void run() {
 						rlInstall.setVisibility(View.GONE);
-						rlOSMain.setVisibility(View.VISIBLE);
-						osChanged(event);
+						if (event!=null) {
+							rlOSMain.setVisibility(View.VISIBLE);
+							osChanged(event);
+						} else otherEventReceived(new OtherEvent(OtherEvent.EventType.BLANK));
 					}
 				});
 
@@ -121,9 +123,12 @@ public class MyActivity extends Activity {
 				try {
 					startActivityForResult(intent, 0);
 				} catch (ActivityNotFoundException e) {
-					Toast.makeText(this,R.string.mustHaveQRCodeReader,Toast.LENGTH_LONG).show();
+					Toast.makeText(this, R.string.mustHaveQRCodeReader, Toast.LENGTH_LONG).show();
 				}
 				Log.v(TAG, "Scan activity started");
+				break;
+			case INSTALL_WITHOUT_QR:
+				install(null);
 				break;
 			case KEEPALIVE:
 				if (mVisible) {
@@ -143,12 +148,12 @@ public class MyActivity extends Activity {
 	protected void onStart() {
 		super.onStart();
 		ivCircle.setVisibility(View.VISIBLE);
-		if (App.getRegid()==null) {
-			((App) getApplication()).registerInBackground();
-		} else {
-			Log.v(TAG, "registrationId:" + App.getRegid());
-			onGCMConnected(new GCMConnectedEvent(App.getRegid()));
-		}
+		//		if (App.getRegid()==null) {
+		((App) getApplication()).registerInBackground();
+		//		} else {
+		//			Log.v(TAG, "registrationId:" + App.getRegid());
+		//			onGCMConnected(new GCMConnectedEvent(App.getRegid()));
+		//		}
 	}
 
 	@Subscribe
@@ -173,7 +178,7 @@ public class MyActivity extends Activity {
 			@Override
 			public void run() {
 				if (event.getId() != null) {
-					tvIp.setText(Utils.getIPAddress(true) + "\n" + event.getId().name);
+					tvIp.setText(Utils.getIPAddress(true) + "\n" + event.getId().getName());
 				}
 			}
 		});

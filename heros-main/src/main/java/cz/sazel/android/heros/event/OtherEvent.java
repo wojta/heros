@@ -8,6 +8,7 @@ public class OtherEvent {
     public enum EventType {
         BLANK,
         INSTALL,
+        INSTALL_WITHOUT_QR,
         KEEPALIVE
     }
 

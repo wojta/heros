@@ -36,36 +36,32 @@
       <sourceFolder url="file://$USER_HOME$/build/heros/heros-main/generated/source/buildConfig/debug" isTestSource="false" generated="true" />
       <sourceFolder url="file://$USER_HOME$/build/heros/heros-main/generated/source/rs/debug" isTestSource="false" generated="true" />
       <sourceFolder url="file://$USER_HOME$/build/heros/heros-main/generated/res/rs/debug" type="java-resource" />
-      <sourceFolder url="file://$USER_HOME$/build/heros/heros-main/generated/res/generated/debug" type="java-resource" />
+      <sourceFolder url="file://$USER_HOME$/build/heros/heros-main/generated/res/resValues/debug" type="java-resource" />
       <sourceFolder url="file://$USER_HOME$/build/heros/heros-main/generated/source/r/androidTest/debug" isTestSource="true" generated="true" />
       <sourceFolder url="file://$USER_HOME$/build/heros/heros-main/generated/source/aidl/androidTest/debug" isTestSource="true" generated="true" />
       <sourceFolder url="file://$USER_HOME$/build/heros/heros-main/generated/source/buildConfig/androidTest/debug" isTestSource="true" generated="true" />
       <sourceFolder url="file://$USER_HOME$/build/heros/heros-main/generated/source/rs/androidTest/debug" isTestSource="true" generated="true" />
       <sourceFolder url="file://$USER_HOME$/build/heros/heros-main/generated/res/rs/androidTest/debug" type="java-test-resource" />
-      <sourceFolder url="file://$USER_HOME$/build/heros/heros-main/generated/res/generated/androidTest/debug" type="java-test-resource" />
+      <sourceFolder url="file://$USER_HOME$/build/heros/heros-main/generated/res/resValues/androidTest/debug" type="java-test-resource" />
       <excludeFolder url="file://$USER_HOME$/build/heros/heros-main/intermediates/assets" />
-      <excludeFolder url="file://$USER_HOME$/build/heros/heros-main/intermediates/bundles" />
+      <excludeFolder url="file://$USER_HOME$/build/heros/heros-main/intermediates/blame" />
       <excludeFolder url="file://$USER_HOME$/build/heros/heros-main/intermediates/classes" />
-      <excludeFolder url="file://$USER_HOME$/build/heros/heros-main/intermediates/coverage-instrumented-classes" />
       <excludeFolder url="file://$USER_HOME$/build/heros/heros-main/intermediates/dependency-cache" />
       <excludeFolder url="file://$USER_HOME$/build/heros/heros-main/intermediates/dex" />
-      <excludeFolder url="file://$USER_HOME$/build/heros/heros-main/intermediates/dex-cache" />
       <excludeFolder url="file://$USER_HOME$/build/heros/heros-main/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.1/jars" />
       <excludeFolder url="file://$USER_HOME$/build/heros/heros-main/intermediates/exploded-aar/com.android.support/support-v4/22.2.1/jars" />
       <excludeFolder url="file://$USER_HOME$/build/heros/heros-main/intermediates/exploded-aar/com.google.android.gms/play-services-base/7.5.0/jars" />
       <excludeFolder url="file://$USER_HOME$/build/heros/heros-main/intermediates/exploded-aar/com.google.android.gms/play-services-gcm/7.5.0/jars" />
       <excludeFolder url="file://$USER_HOME$/build/heros/heros-main/intermediates/incremental" />
-      <excludeFolder url="file://$USER_HOME$/build/heros/heros-main/intermediates/jacoco" />
-      <excludeFolder url="file://$USER_HOME$/build/heros/heros-main/intermediates/javaResources" />
-      <excludeFolder url="file://$USER_HOME$/build/heros/heros-main/intermediates/libs" />
-      <excludeFolder url="file://$USER_HOME$/build/heros/heros-main/intermediates/lint" />
+      <excludeFolder url="file://$USER_HOME$/build/heros/heros-main/intermediates/jniLibs" />
       <excludeFolder url="file://$USER_HOME$/build/heros/heros-main/intermediates/manifests" />
-      <excludeFolder url="file://$USER_HOME$/build/heros/heros-main/intermediates/ndk" />
       <excludeFolder url="file://$USER_HOME$/build/heros/heros-main/intermediates/pre-dexed" />
-      <excludeFolder url="file://$USER_HOME$/build/heros/heros-main/intermediates/proguard" />
       <excludeFolder url="file://$USER_HOME$/build/heros/heros-main/intermediates/res" />
+      <excludeFolder url="file://$USER_HOME$/build/heros/heros-main/intermediates/resources" />
       <excludeFolder url="file://$USER_HOME$/build/heros/heros-main/intermediates/rs" />
       <excludeFolder url="file://$USER_HOME$/build/heros/heros-main/intermediates/symbols" />
+      <excludeFolder url="file://$USER_HOME$/build/heros/heros-main/intermediates/tmp" />
+      <excludeFolder url="file://$USER_HOME$/build/heros/heros-main/intermediates/transforms" />
       <excludeFolder url="file://$USER_HOME$/build/heros/heros-main/outputs" />
       <excludeFolder url="file://$USER_HOME$/build/heros/heros-main/tmp" />
     </content>

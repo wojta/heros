@@ -34,7 +34,7 @@ public class SelectIdActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.select_id);
-		mList = new ArrayList<Id>();
+		mList = new ArrayList<>();
 		lvList = (ListView) findViewById(R.id.lvList);
 		lvList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -68,7 +68,8 @@ public class SelectIdActivity extends Activity {
 						while ((line = br.readLine()) != null) {
 							String[] pola = line.split(",");
 							if (pola.length == 2) {
-								mList.add(new Id(pola[0], pola[1]));
+								Id id=new Id(pola[0], pola[1]);
+								if (mList.indexOf(id)==-1) mList.add(id);
 							}
 						}
 					} catch (ProtocolException e) {
@@ -115,7 +116,7 @@ public class SelectIdActivity extends Activity {
 			public void onClick(DialogInterface dialog, int which) {
 				String text = String.valueOf(edIp.getText());
 				mList.add(new Id(text, text, true));
-				((ArrayAdapter)lvList.getAdapter()).notifyDataSetChanged();
+				((ArrayAdapter) lvList.getAdapter()).notifyDataSetChanged();
 			}
 		});
 		builder.show();

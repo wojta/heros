@@ -1,6 +1,8 @@
 package cz.sazel.android.heros_control;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -24,6 +26,7 @@ public class MyActivity extends Activity {
 	private TextView tvId;
 	private CheckBox mCkInstallUnlocked;
 	private Button mBtInstall;
+	private CheckBox mCKWithoutQR;
 
 	/**
 	 * Called when the activity is first created.
@@ -34,14 +37,16 @@ public class MyActivity extends Activity {
 		setContentView(R.layout.control_main);
 		mHandler = new Handler();
 		mStopped = false;
-		mCkInstallUnlocked=(CheckBox)findViewById(R.id.ckInstallUnlocked);
+		mCkInstallUnlocked = (CheckBox) findViewById(R.id.ckInstallUnlocked);
 		findViewById(R.id.btPrvniOS).setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				if (mId!=null) {
+				if (mId != null) {
 					changeOs("Laura", 1);
-				} else idWarningToast();
+				} else {
+					idWarningToast();
+				}
 			}
 		});
 
@@ -49,10 +54,12 @@ public class MyActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				if (mId!=null) {
+				if (mId != null) {
 					changeOs("Robert", 2);
 
-				} else idWarningToast();
+				} else {
+					idWarningToast();
+				}
 			}
 		});
 
@@ -60,22 +67,32 @@ public class MyActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				if (mId!=null) {
-				otherEvent("BLANK");
-			} else idWarningToast();
+				if (mId != null) {
+					otherEvent("BLANK");
+				} else {
+					idWarningToast();
+				}
 			}
 		});
-		mBtInstall=(Button)findViewById(R.id.btInstall);
+
+		mCKWithoutQR = (CheckBox) findViewById(R.id.ckWithoutQR);
+		mBtInstall = (Button) findViewById(R.id.btInstall);
 		mBtInstall.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				if (mId!=null) {
+				if (mId != null) {
 					mBtInstall.setEnabled(false);
 					mCkInstallUnlocked.setChecked(false);
-					otherEvent("INSTALL");
+					if (!mCKWithoutQR.isChecked()) {
+						otherEvent("INSTALL");
+					} else {
+						otherEvent("INSTALL_WITHOUT_QR");
+					}
 
-				} else idWarningToast();
+				} else {
+					idWarningToast();
+				}
 			}
 		});
 
@@ -142,7 +159,7 @@ public class MyActivity extends Activity {
 	}
 
 	private void idWarningToast() {
-		Toast.makeText(this,R.string.idMustBeSelected,Toast.LENGTH_LONG).show();
+		Toast.makeText(this, R.string.idMustBeSelected, Toast.LENGTH_LONG).show();
 	}
 
 	private void otherEvent(final String type) {
@@ -206,7 +223,20 @@ public class MyActivity extends Activity {
 
 	@Override
 	public void onBackPressed() {
+		AlertDialog.Builder builder=new AlertDialog.Builder(this);
+		builder.setTitle(R.string.closeActivityTitle).setMessage(R.string.closeActivityMessage).setPositiveButton(R.string.Yes, new DialogInterface.OnClickListener() {
 
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				finish();
+			}
+		}).setNegativeButton(R.string.No, new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+
+			}
+		}).show();
 	}
 
 	@Override

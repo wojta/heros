@@ -1,0 +1,41 @@
+TASK cz.sazel.android.heros.main id=22
+  ACTIVITY cz.sazel.android.heros/.MyActivity b3336070 pid=19694
+    Local Activity b301bd60 State:
+      mResumed=false mStopped=true mFinished=false
+      mLoadersStarted=false
+      mChangingConfigurations=false
+      mCurrentConfig={1.0 310mcc260mnc en_US ldltr sw600dp w961dp h528dp 213dpi lrg land finger qwerty/v/v -nav/h s.7}
+    FragmentManager misc state:
+      mActivity=cz.sazel.android.heros.MyActivity@b301bd60
+      mContainer=android.app.Activity$1@b3037440
+      mCurState=3 mStateSaved=true mDestroyed=false
+    ViewRoot:
+      mAdded=true mRemoved=false
+      mConsumeBatchedInputScheduled=false
+      mPendingInputEventCount=0
+      mProcessInputEventsScheduled=false
+      mTraversalScheduled=false
+      android.view.ViewRootImpl$NativePreImeInputStage: mQueueLength=0
+      android.view.ViewRootImpl$ImeInputStage: mQueueLength=0
+      android.view.ViewRootImpl$NativePostImeInputStage: mQueueLength=0
+    Choreographer:
+      mFrameScheduled=false
+      mLastFrameTime=21137732 (70598 ms ago)
+    View Hierarchy:
+      com.android.internal.policy.impl.PhoneWindow$DecorView{b307c760 I.E..... R....... 0,0-1280,736}
+        android.widget.LinearLayout{b3014850 V.E..... ........ 0,0-1280,736}
+          android.view.ViewStub{b3010398 G.E..... ......I. 0,0-0,0 #102030e}
+          android.widget.FrameLayout{b3018448 V.E..... ........ 0,0-1280,736 #1020002 android:id/content}
+            android.widget.FrameLayout{b3008e08 V.E..... ........ 0,0-1280,736 #7f0b005a app:id/top_lvl_layout}
+              android.widget.RelativeLayout{b3013830 G.E..... ......ID 0,0-1280,736 #7f0b005b app:id/rlOSMain}
+                android.widget.ImageView{b3011838 V.ED.... ........ 0,0-1280,736 #7f0b005c app:id/ivBackground}
+                android.widget.TextView{b3017768 V.ED.... ........ 881,0-1280,50 #7f0b005d app:id/tvIP}
+                android.widget.FrameLayout{b300ee78 G.E..... ......I. 0,0-0,0}
+                android.widget.LinearLayout{b3036af0 V.E..... ......ID 640,60-640,60 #7f0b0054 app:id/linearLayout}
+                cz.sazel.android.heros.view.TextViewFontAlexbrush{b3033bf8 V.ED.... ........ 484,284-796,451 #7f0b005e app:id/tvName}
+                android.widget.ImageView{b307a130 V.ED.... ......ID 606,451-673,518 #7f0b005f app:id/ivCircle}
+              android.widget.RelativeLayout{b303f650 G.E..... ......I. 0,0-1280,736 #7f0b0060 app:id/rlOSInstall}
+                android.widget.ProgressBar{b300d0d0 V.ED.... ........ 64,346-1216,389 #7f0b0061 app:id/progressBar}
+                android.widget.TextView{b3069e40 V.ED.... ........ 424,264-856,325 #7f0b0062 app:id/textView2}
+    Looper (main, tid 1) {b3004c40}
+      (Total messages: 0, idling=false, quitting=false)

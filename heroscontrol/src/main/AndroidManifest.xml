@@ -10,12 +10,13 @@
         <activity
                 android:name="MyActivity"
                 android:taskAffinity="cz.sazel.android.heros.control"
-                android:label="@string/OSControl" android:screenOrientation="portrait">
+                android:label="@string/OSControl" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
-        <activity android:name=".SelectIdActivity" android:label="@string/selectID2" android:screenOrientation="portrait"/>
+        <activity android:name=".SelectIdActivity" android:label="@string/selectID2" />
     </application>
 </manifest>

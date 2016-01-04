@@ -8,8 +8,13 @@
     <string name="selectID">&#8230;</string>
     <string name="ok">OK</string>
     <string name="enter_ip">Enter server\'s IP address</string>
-    <string name="OSControl">Operating system - control</string>
+    <string name="OSControl">OS - control</string>
     <string name="installUnolocked">Install unlocked</string>
     <string name="idMustBeSelected">Id must be selected from Settings first, please click  top right icon for setup.</string>
     <string name="selectID2">Select ID</string>
+    <string name="installWithoutQR">Without QR code</string>
+    <string name="closeActivityTitle">Close activity</string>
+    <string name="closeActivityMessage">Would you like to really close this screen? Only larp organizer should do that.</string>
+    <string name="Yes">Yes</string>
+    <string name="No">No</string>
 </resources>

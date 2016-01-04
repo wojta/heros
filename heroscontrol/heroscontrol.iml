@@ -32,37 +32,32 @@
     <output-test url="file://$USER_HOME$/build/heros/heroscontrol/intermediates/classes/androidTest/debug" />
     <exclude-output />
     <content url="file://$USER_HOME$/build/heros/heroscontrol">
+      <sourceFolder url="file://$USER_HOME$/build/heros/heroscontrol/generated/source/apt/debug" isTestSource="false" generated="true" />
       <sourceFolder url="file://$USER_HOME$/build/heros/heroscontrol/generated/source/r/debug" isTestSource="false" generated="true" />
       <sourceFolder url="file://$USER_HOME$/build/heros/heroscontrol/generated/source/aidl/debug" isTestSource="false" generated="true" />
       <sourceFolder url="file://$USER_HOME$/build/heros/heroscontrol/generated/source/buildConfig/debug" isTestSource="false" generated="true" />
       <sourceFolder url="file://$USER_HOME$/build/heros/heroscontrol/generated/source/rs/debug" isTestSource="false" generated="true" />
       <sourceFolder url="file://$USER_HOME$/build/heros/heroscontrol/generated/res/rs/debug" type="java-resource" />
-      <sourceFolder url="file://$USER_HOME$/build/heros/heroscontrol/generated/res/generated/debug" type="java-resource" />
+      <sourceFolder url="file://$USER_HOME$/build/heros/heroscontrol/generated/res/resValues/debug" type="java-resource" />
       <sourceFolder url="file://$USER_HOME$/build/heros/heroscontrol/generated/source/r/androidTest/debug" isTestSource="true" generated="true" />
       <sourceFolder url="file://$USER_HOME$/build/heros/heroscontrol/generated/source/aidl/androidTest/debug" isTestSource="true" generated="true" />
       <sourceFolder url="file://$USER_HOME$/build/heros/heroscontrol/generated/source/buildConfig/androidTest/debug" isTestSource="true" generated="true" />
       <sourceFolder url="file://$USER_HOME$/build/heros/heroscontrol/generated/source/rs/androidTest/debug" isTestSource="true" generated="true" />
       <sourceFolder url="file://$USER_HOME$/build/heros/heroscontrol/generated/res/rs/androidTest/debug" type="java-test-resource" />
-      <sourceFolder url="file://$USER_HOME$/build/heros/heroscontrol/generated/res/generated/androidTest/debug" type="java-test-resource" />
+      <sourceFolder url="file://$USER_HOME$/build/heros/heroscontrol/generated/res/resValues/androidTest/debug" type="java-test-resource" />
       <excludeFolder url="file://$USER_HOME$/build/heros/heroscontrol/intermediates/assets" />
       <excludeFolder url="file://$USER_HOME$/build/heros/heroscontrol/intermediates/bundles" />
       <excludeFolder url="file://$USER_HOME$/build/heros/heroscontrol/intermediates/classes" />
-      <excludeFolder url="file://$USER_HOME$/build/heros/heroscontrol/intermediates/coverage-instrumented-classes" />
       <excludeFolder url="file://$USER_HOME$/build/heros/heroscontrol/intermediates/dependency-cache" />
-      <excludeFolder url="file://$USER_HOME$/build/heros/heroscontrol/intermediates/dex" />
-      <excludeFolder url="file://$USER_HOME$/build/heros/heroscontrol/intermediates/dex-cache" />
       <excludeFolder url="file://$USER_HOME$/build/heros/heroscontrol/intermediates/incremental" />
-      <excludeFolder url="file://$USER_HOME$/build/heros/heroscontrol/intermediates/jacoco" />
-      <excludeFolder url="file://$USER_HOME$/build/heros/heroscontrol/intermediates/javaResources" />
-      <excludeFolder url="file://$USER_HOME$/build/heros/heroscontrol/intermediates/libs" />
+      <excludeFolder url="file://$USER_HOME$/build/heros/heroscontrol/intermediates/jniLibs" />
       <excludeFolder url="file://$USER_HOME$/build/heros/heroscontrol/intermediates/lint" />
       <excludeFolder url="file://$USER_HOME$/build/heros/heroscontrol/intermediates/manifests" />
-      <excludeFolder url="file://$USER_HOME$/build/heros/heroscontrol/intermediates/ndk" />
-      <excludeFolder url="file://$USER_HOME$/build/heros/heroscontrol/intermediates/pre-dexed" />
-      <excludeFolder url="file://$USER_HOME$/build/heros/heroscontrol/intermediates/proguard" />
       <excludeFolder url="file://$USER_HOME$/build/heros/heroscontrol/intermediates/res" />
+      <excludeFolder url="file://$USER_HOME$/build/heros/heroscontrol/intermediates/resources" />
       <excludeFolder url="file://$USER_HOME$/build/heros/heroscontrol/intermediates/rs" />
       <excludeFolder url="file://$USER_HOME$/build/heros/heroscontrol/intermediates/symbols" />
+      <excludeFolder url="file://$USER_HOME$/build/heros/heroscontrol/intermediates/transforms" />
       <excludeFolder url="file://$USER_HOME$/build/heros/heroscontrol/outputs" />
       <excludeFolder url="file://$USER_HOME$/build/heros/heroscontrol/tmp" />
     </content>
@@ -91,5 +86,6 @@
     </content>
     <orderEntry type="jdk" jdkName="Android API 22 Platform (1)" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" exported="" name="lombok-1.12.6" level="project" />
   </component>
 </module>
