@@ -3,7 +3,7 @@
 
     <string name="firstOS">Laura OS</string>
     <string name="secondOS">Robert OS</string>
-    <string name="blank">Černá obrazovka</string>
+    <string name="blank">Vypnout obrazovku</string>
     <string name="instalace">Instalace</string>
     <string name="selectID">&#8230;</string>
     <string name="ok">OK</string>
@@ -14,4 +14,7 @@
     <string name="selectID2">Vyberte ID</string>
     <string name="installWithoutQR">Bez QR kódu</string>
     <string name="closeActivityTitle">Close activity</string>
+    <string name="connectionError">Chyba spojení!</string>
+    <string name="connectionOk">Spojení OK.</string>
+    <string name="lastCmd">Poslední příkaz:</string>
 </resources>

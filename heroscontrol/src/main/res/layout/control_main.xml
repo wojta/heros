@@ -1,84 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:layout_margin="@dimen/mat16"
-    android:orientation="vertical">
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_margin="@dimen/mat16"
+                android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/llOSSelect"
-        android:layout_width="match_parent"
-        android:layout_height="200dp">
+            android:id="@+id/llOSSelect"
+            android:layout_width="match_parent"
+            android:layout_height="200dp">
 
         <Button
-            android:id="@+id/btPrvniOS"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="0dp"
-            android:layout_marginTop="0dp"
-            android:layout_weight="1"
-            android:text="@string/firstOS" />
+                android:id="@+id/btPrvniOS"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="0dp"
+                android:layout_marginTop="0dp"
+                android:layout_weight="1"
+                android:text="@string/firstOS"/>
 
         <Button
-            android:id="@+id/btDruheOS"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginTop="0dp"
-            android:layout_weight="1"
-            android:text="@string/secondOS" />
+                android:id="@+id/btDruheOS"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="0dp"
+                android:layout_weight="1"
+                android:text="@string/secondOS"/>
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="fill_parent"
-        android:layout_height="100dp"
-        android:layout_below="@+id/llOSSelect"
-        android:focusableInTouchMode="false"
-        android:orientation="horizontal">
+            android:id="@+id/linearLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="100dp"
+            android:layout_below="@+id/llOSSelect"
+            android:focusableInTouchMode="false"
+            android:orientation="horizontal">
 
         <Button
-            android:id="@+id/btInstall"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:text="@string/instalace" />
+                android:id="@+id/btInstall"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:text="@string/instalace"/>
 
         <Button
-            android:id="@+id/btBlank"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:text="@string/blank" />
+                android:id="@+id/btBlank"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:text="@string/blank"/>
     </LinearLayout>
 
     <TextView
-        android:id="@+id/txId"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/linearLayout"
-        android:layout_centerHorizontal="true"
-        android:text="&lt;no id yet selected&gt;" />
+            android:id="@+id/txId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/linearLayout"
+            android:layout_centerHorizontal="true"
+            android:text="&lt;no id yet selected&gt;"/>
+
+    <TextView
+            android:text="-"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txLastCommand"
+            android:layout_marginTop="0dp"
+            android:gravity="center"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/txId"/>
 
     <CheckBox
-        android:id="@+id/ckInstallUnlocked"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:checked="true"
-        android:text="@string/installUnolocked" />
+            android:id="@+id/ckInstallUnlocked"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:checked="true"
+            android:text="@string/installUnolocked"/>
 
     <CheckBox
-        android:id="@+id/ckWithoutQR"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:checked="true"
-        android:text="@string/installWithoutQR" />
+            android:id="@+id/ckWithoutQR"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:checked="true"
+            android:text="@string/installWithoutQR"/>
 </RelativeLayout>
 

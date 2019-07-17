@@ -30,3 +30,8 @@ proguard/
 
 #IDEA
 .idea/
+*.iml
+
+google-services.json
+heros-main/release/
+

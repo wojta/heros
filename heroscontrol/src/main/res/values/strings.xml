@@ -3,7 +3,7 @@
 
      <string name="firstOS">Laura OS</string>
     <string name="secondOS">Robert OS</string>
-    <string name="blank">Black screen</string>
+    <string name="blank">Toggle screen</string>
     <string name="instalace">Install</string>
     <string name="selectID">&#8230;</string>
     <string name="ok">OK</string>
@@ -17,4 +17,7 @@
     <string name="closeActivityMessage">Would you like to really close this screen? Only larp organizer should do that.</string>
     <string name="Yes">Yes</string>
     <string name="No">No</string>
+    <string name="connectionError">Connection error!</string>
+    <string name="connectionOk">Connection OK.</string>
+    <string name="lastCmd">Last command:</string>
 </resources>
