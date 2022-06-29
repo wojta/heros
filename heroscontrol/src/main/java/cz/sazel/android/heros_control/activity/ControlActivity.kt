@@ -8,7 +8,7 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import cz.sazel.android.heros_control.Constants.Events.*
 import cz.sazel.android.heros_control.Constants.ID
 import cz.sazel.android.heros_control.Constants.IP
@@ -16,12 +16,14 @@ import cz.sazel.android.heros_control.Constants.NAME
 import cz.sazel.android.heros_control.Id
 import cz.sazel.android.heros_control.R
 import cz.sazel.android.heros_control.SendRequest
+import cz.sazel.android.heros_control.databinding.ControlMainBinding
 import cz.sazel.android.heros_control.viewmodel.ControlVM
-import kotlinx.android.synthetic.main.control_main.*
 
 class ControlActivity : FragmentActivity() {
 
-    private val viewModel by lazy { ViewModelProviders.of(this).get(ControlVM::class.java) }
+    private lateinit var binding: ControlMainBinding
+
+    private val viewModel by lazy { ViewModelProvider(this)[ControlVM::class.java] }
     private var stopped = true
 
     /**
@@ -29,64 +31,67 @@ class ControlActivity : FragmentActivity() {
      */
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.control_main)
-        btPrvniOS.setOnClickListener {
-            if (viewModel.idLiveData.value != null) {
-                viewModel.changeOs("Laura", 1)
-            } else {
-                idWarningToast()
-            }
-        }
-
-        btDruheOS.setOnClickListener {
-            if (viewModel.idLiveData.value != null) {
-                viewModel.changeOs("Robert", 2)
-
-            } else {
-                idWarningToast()
-            }
-        }
-
-        btBlank.setOnClickListener {
-            if (viewModel.idLiveData.value != null) {
-                viewModel.otherEvent(BLANK)
-            } else {
-                idWarningToast()
-            }
-        }
-
-        btInstall.setOnClickListener {
-            if (viewModel.idLiveData.value != null) {
-                btInstall.isEnabled = false
-                ckInstallUnlocked.isChecked = false
-                if (!ckWithoutQR.isChecked) {
-                    viewModel.otherEvent(INSTALL)
+        binding = ControlMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        with(binding) {
+            btPrvniOS.setOnClickListener {
+                if (viewModel.idLiveData.value != null) {
+                    viewModel.changeOs("Laura", 1)
                 } else {
-                    viewModel.otherEvent(INSTALL_WITHOUT_QR)
+                    idWarningToast()
                 }
-
-            } else {
-                idWarningToast()
             }
-        }
 
-        ckInstallUnlocked.setOnCheckedChangeListener { buttonView, isChecked -> btInstall.isEnabled = isChecked }
-        if (savedInstanceState != null) {
-            val id = savedInstanceState.getString(ID) ?: ""
-            txId.text = id
-            viewModel.idLiveData.postValue(id)
-            val name = savedInstanceState.getString(NAME) ?: ""
-            viewModel.nameLiveData.postValue(name)
-            val ip = savedInstanceState.getBoolean(IP)
-            txId.text = name
-            viewModel.sendRequest = SendRequest(Id(id, name, ip))
+            btDruheOS.setOnClickListener {
+                if (viewModel.idLiveData.value != null) {
+                    viewModel.changeOs("Robert", 2)
+
+                } else {
+                    idWarningToast()
+                }
+            }
+
+            btBlank.setOnClickListener {
+                if (viewModel.idLiveData.value != null) {
+                    viewModel.otherEvent(BLANK)
+                } else {
+                    idWarningToast()
+                }
+            }
+
+            btInstall.setOnClickListener {
+                if (viewModel.idLiveData.value != null) {
+                    btInstall.isEnabled = false
+                    ckInstallUnlocked.isChecked = false
+                    if (!ckWithoutQR.isChecked) {
+                        viewModel.otherEvent(INSTALL)
+                    } else {
+                        viewModel.otherEvent(INSTALL_WITHOUT_QR)
+                    }
+
+                } else {
+                    idWarningToast()
+                }
+            }
+
+            ckInstallUnlocked.setOnCheckedChangeListener { buttonView, isChecked -> btInstall.isEnabled = isChecked }
+            if (savedInstanceState != null) {
+                val id = savedInstanceState.getString(ID) ?: ""
+                txId.text = id
+                viewModel.idLiveData.postValue(id)
+                val name = savedInstanceState.getString(NAME) ?: ""
+                viewModel.nameLiveData.postValue(name)
+                val ip = savedInstanceState.getBoolean(IP)
+                txId.text = name
+                viewModel.sendRequest = SendRequest(Id(id, name, ip))
+            }
+            viewModel.toastLiveData.observe(this@ControlActivity, Observer { Toast.makeText(this@ControlActivity, it, Toast.LENGTH_LONG).show() })
+            viewModel.buttonsEnabledLiveData.observe(this@ControlActivity, Observer { setEnableButtons(it) })
+            viewModel.lastCommandLD.observe(this@ControlActivity, Observer { txLastCommand.text = it })
         }
-        viewModel.toastLiveData.observe(this, Observer { Toast.makeText(this@ControlActivity, it, Toast.LENGTH_LONG).show() })
-        viewModel.buttonsEnabledLiveData.observe(this, Observer { setEnableButtons(it) })
-        viewModel.lastCommandLD.observe(this, Observer { txLastCommand.text = it })
     }
 
-    private fun setEnableButtons(enableButtons: Boolean) {
+    private fun setEnableButtons(enableButtons: Boolean) = with(binding) {
         btPrvniOS.isEnabled = enableButtons
         btDruheOS.isEnabled = enableButtons
         btBlank.isEnabled = enableButtons
@@ -106,7 +111,7 @@ class ControlActivity : FragmentActivity() {
     override fun onStart() {
         super.onStart()
         stopped = false
-        viewModel.keepAlive()
+        //viewModel.keepAlive()
     }
 
     override fun onStop() {
@@ -114,7 +119,7 @@ class ControlActivity : FragmentActivity() {
         stopped = true
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
+    override fun onSaveInstanceState(outState: Bundle) = with(binding) {
         super.onSaveInstanceState(outState)
         outState.putString(ID, txId.text.toString())
         outState.putString(NAME, viewModel.nameLiveData.value)
@@ -136,12 +141,12 @@ class ControlActivity : FragmentActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) = with(binding) {
         when (requestCode) {
             1 -> if (resultCode == RESULT_OK && data != null) {
-                val id = data.getStringExtra(ID)
+                val id = data.getStringExtra(ID)!!
                 viewModel.idLiveData.postValue(id)
-                val name = data.getStringExtra(NAME)
+                val name = data.getStringExtra(NAME)!!
                 viewModel.nameLiveData.postValue(name)
                 val ip = data.getBooleanExtra(IP, false)
                 viewModel.ipLiveData.postValue(ip)

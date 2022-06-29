@@ -15,16 +15,16 @@ import cz.sazel.android.heros.base.Constants.OTHER_EVENT
  */
 class FirebaseMsgService : FirebaseMessagingService() {
 
-    override fun onMessageReceived(p0: RemoteMessage?) {
-        super.onMessageReceived(p0)
-        Log.d(TAG, "onMessageReceived from ${p0?.from} data=${p0?.data}")
-        val data = p0?.data
+    override fun onMessageReceived(message: RemoteMessage) {
+        super.onMessageReceived(message)
+        Log.d(TAG, "onMessageReceived from ${message.from} data=${message.data}")
+        val data = message.data
         val intent = Intent(Constants.ACTION_MSG_RECEIVED).apply {
             val bundle = Bundle().apply {
-                putString(MSG_TYPE, data?.get(MSG_TYPE))
-                putString(OTHER_EVENT, data?.get(OTHER_EVENT))
-                putString(NAME, data?.get(NAME))
-                putString(COLOR_VARIANT, data?.get(COLOR_VARIANT))
+                putString(MSG_TYPE, data[MSG_TYPE])
+                putString(OTHER_EVENT, data[OTHER_EVENT])
+                putString(NAME, data[NAME])
+                putString(COLOR_VARIANT, data[COLOR_VARIANT])
             }
             putExtras(bundle)
         }

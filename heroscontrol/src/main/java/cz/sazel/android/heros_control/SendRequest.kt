@@ -61,7 +61,7 @@ class SendRequest(private val mId: Id) {
             connection = connect()
             ow = OutputStreamWriter(connection.outputStream)
         } else {
-            socket = Socket(mId.id.trim { it <= ' ' }, 12346)
+            socket = Socket(mId.id.trim { it <= ' ' }, 12345)
             ow = OutputStreamWriter(socket.getOutputStream())
         }
         ow.write(if (mId.isIp) json.getJSONObject("data").toString() + "\n" else json.toString())
