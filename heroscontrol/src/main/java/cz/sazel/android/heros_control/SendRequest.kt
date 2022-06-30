@@ -1,5 +1,6 @@
 package cz.sazel.android.heros_control
 
+import android.util.Log
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -57,6 +58,7 @@ class SendRequest(private val mId: Id) {
         val ow: OutputStreamWriter
         var connection: HttpsURLConnection? = null
         var socket: Socket? = null
+        Log.i(TAG,"<==== Sending request ${json.toString(2)}")
         if (!mId.isIp) {
             connection = connect()
             ow = OutputStreamWriter(connection.outputStream)
@@ -71,6 +73,7 @@ class SendRequest(private val mId: Id) {
         if (connection != null && connection.responseCode != 200)
             throw IOException("error " + connection.responseCode + ":" + connection.responseMessage)
         socket?.close()
+        Log.i(TAG,"Send request complete ${json.toString(2)} =====>")
     }
 
     @Throws(IOException::class)
@@ -90,4 +93,7 @@ class SendRequest(private val mId: Id) {
         }
     }
 
+    companion object {
+        const val TAG="SendRequest"
+    }
 }

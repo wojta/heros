@@ -42,26 +42,26 @@ class ServerService : Service() {
                 mSocket = ServerSocket(PORT)
                 while (mRunning) {
                     val mClientSocket = mSocket!!.accept()
-                    val t = Thread(Runnable {
+                    Log.d(TAG, "Client socket accept")
+                    val t = Thread {
                         try {
                             val br = BufferedReader(InputStreamReader(mClientSocket.getInputStream()))
-                            var line: String? = br.readLine()
+                            val line: String? = br.readLine()
 
-                            while (mRunning && (line != null)) {
-                                try {
+                            try {
+                                line?.let {
                                     parseLine(line)
-                                    line = br.readLine()
-                                } catch (e: JSONException) {
-                                    Log.e(TAG, "invalid JSON: $line")
-                                    break
-                                }
+                                } ?: Log.w(TAG, "empty line")
+                            } catch (e: JSONException) {
+                                Log.e(TAG, "invalid JSON: $line")
                             }
                             br.close()
-                            mClientSocket.close()
                         } catch (e: IOException) {
                             e.printStackTrace()
+                        } finally {
+                            mClientSocket.close()
                         }
-                    })
+                    }
                     t.start()
                 }
                 mSocket!!.close()
@@ -79,11 +79,15 @@ class ServerService : Service() {
             intent.putExtra(MSG_TYPE, msgType)
             if (CHANGE_OS_REQUEST == msgType) {
                 intent.putExtra(NAME, jsonObject.getString(NAME))
-                intent.putExtra(COLOR_VARIANT,
-                        jsonObject.getString(COLOR_VARIANT))
+                intent.putExtra(
+                    COLOR_VARIANT,
+                    jsonObject.getString(COLOR_VARIANT)
+                )
             } else if (OTHER_REQUEST == msgType) {
-                intent.putExtra(OTHER_EVENT,
-                        jsonObject.getString(OTHER_EVENT))
+                intent.putExtra(
+                    OTHER_EVENT,
+                    jsonObject.getString(OTHER_EVENT)
+                )
             }
             sendBroadcast(intent)
         }
@@ -127,6 +131,6 @@ class ServerService : Service() {
 
         val ACTION_START = Constants.PACKAGE + ".ACTION_START"
         private val TAG = ServerService::class.java.simpleName
-        const val PORT = 12346
+        const val PORT = 12345
     }
 }

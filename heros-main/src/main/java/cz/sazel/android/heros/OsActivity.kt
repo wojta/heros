@@ -17,17 +17,17 @@ import android.view.animation.LinearInterpolator
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.tasks.OnCompleteListener
-import com.google.firebase.iid.FirebaseInstanceId
+import com.google.firebase.messaging.FirebaseMessaging
 import cz.sazel.android.heros.base.Constants
 import cz.sazel.android.heros.base.MessageReceiver
 import cz.sazel.android.heros.base.ServerService
+import cz.sazel.android.heros.databinding.IncallBinding
 import cz.sazel.android.heros.event.Event.*
 import cz.sazel.android.heros.util.Utils
 import cz.sazel.android.heros.viewmodel.OsViewModel
 import cz.sazel.android.heros_control.Id
-import kotlinx.android.synthetic.main.incall.*
 import java.io.IOException
 import kotlin.math.abs
 
@@ -35,7 +35,9 @@ class OsActivity : FragmentActivity() {
     private lateinit var messageReceiver: MessageReceiver
     private var mFadeInAnimation: Animation? = null
 
-    private val viewModel by lazy { ViewModelProviders.of(this).get(OsViewModel::class.java) }
+    private val viewModel by lazy { ViewModelProvider(this)[OsViewModel::class.java] }
+    private lateinit var binding: IncallBinding
+
 
     /**
      * Called when the activity is first created.
@@ -43,73 +45,74 @@ class OsActivity : FragmentActivity() {
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        setContentView(R.layout.incall)
-
+        binding = IncallBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         mFadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_anim)
 
+        with(binding) {
+            tvIP.text = Utils.getIPAddress(true)
 
-        tvIP.text = Utils.getIPAddress(true)
-
-        val serviceIntent = Intent(this, ServerService::class.java)
-        serviceIntent.action = ServerService.ACTION_START
-        startService(serviceIntent)
-        viewModel.eventLiveData.observe(this, Observer {
-            it?.let { event ->
-                when (event) {
-                    is ChangeOSEvent -> osChanged(event)
-                    is OtherEvent -> otherEventReceived(event)
-                    is GCMConnectedEvent -> onGCMConnected(event)
+            val serviceIntent = Intent(this@OsActivity, ServerService::class.java)
+            serviceIntent.action = ServerService.ACTION_START
+            startService(serviceIntent)
+            viewModel.eventLiveData.observe(this@OsActivity, Observer {
+                it?.let { event ->
+                    when (event) {
+                        is ChangeOSEvent -> osChanged(event)
+                        is OtherEvent -> otherEventReceived(event)
+                        is GCMConnectedEvent -> onGCMConnected(event)
+                    }
                 }
-            }
-        })
-        viewModel.visibleLD.observe(this, Observer {
-            val visible = it ?: true
-            if (visible) {
-                mFadeInAnimation!!.interpolator = ReverseInterpolator()
-            } else {
-                mFadeInAnimation!!.interpolator = LinearInterpolator()
-            }
-            ivCircle!!.startAnimation(mFadeInAnimation)
-        })
-        viewModel.blankLiveData.observe(this, Observer {
-            rlOSMain.visibility = if (it == true) View.GONE else View.VISIBLE
-        })
-        viewModel.progressLiveData.observe(this, Observer {
-            progressBar.progress = it
-            if (it >= 999) {
-                rlOSMain.visibility = View.VISIBLE
-                rlOSInstall.visibility = View.GONE
-                viewModel.visibleLD.postValue(true)
-            }
-        })
-        viewModel.installInProgressLD.observe(this, Observer {
-            rlOSMain.visibility = if (it == true) View.GONE else View.VISIBLE
-            rlOSInstall.visibility = if (it == true) View.VISIBLE else View.GONE
-            if (it == true) {
-                progressBar.progress = 0
-                progressBar.max = 1000
-            }
-        })
+            })
+            viewModel.visibleLD.observe(this@OsActivity, Observer {
+                val visible = it ?: true
+                if (visible) {
+                    mFadeInAnimation!!.interpolator = ReverseInterpolator()
+                } else {
+                    mFadeInAnimation!!.interpolator = LinearInterpolator()
+                }
+                ivCircle!!.startAnimation(mFadeInAnimation)
+            })
+            viewModel.blankLiveData.observe(this@OsActivity, Observer {
+                rlOSMain.visibility = if (it == true) View.GONE else View.VISIBLE
+            })
+            viewModel.progressLiveData.observe(this@OsActivity, Observer {
+                progressBar.progress = it
+                if (it >= 999) {
+                    rlOSMain.visibility = View.VISIBLE
+                    rlOSInstall.visibility = View.GONE
+                    viewModel.visibleLD.postValue(true)
+                }
+            })
+            viewModel.installInProgressLD.observe(this@OsActivity, Observer {
+                rlOSMain.visibility = if (it == true) View.GONE else View.VISIBLE
+                rlOSInstall.visibility = if (it == true) View.VISIBLE else View.GONE
+                if (it == true) {
+                    progressBar.progress = 0
+                    progressBar.max = 1000
+                }
+            })
 
 
-        FirebaseInstanceId.getInstance().instanceId.addOnCompleteListener(OnCompleteListener { task ->
-            var msg = ""
-            if (!task.isSuccessful) {
-                Log.e(TAG, "Not successfully registered to Firebase")
-                return@OnCompleteListener
-            }
+            FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+                var msg = ""
+                if (!task.isSuccessful) {
+                    Log.e(TAG, "Not successfully registered to Firebase")
+                    return@OnCompleteListener
+                }
 
-            try {
-                val id = task.result?.token ?: "<null>"
-                msg = "Device registered, registration ID=$id"
-                val info = Build.MODEL + ":" + Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
-                val regid = Id(id, info)
-                viewModel.registerNewId(regid)
-            } catch (ex: IOException) {
-                msg = "Error :" + ex.message
-            }
-            Log.d(TAG, msg)
-        })
+                try {
+                    val id = task.result ?: "<null>"
+                    msg = "Device registered, registration ID=$id"
+                    val info = Build.MODEL + ":" + Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
+                    val regid = Id(id, info)
+                    viewModel.registerNewId(regid)
+                } catch (ex: IOException) {
+                    msg = "Error :" + ex.message
+                }
+                Log.d(TAG, msg)
+            })
+        }
     }
 
     private fun install(event: ChangeOSEvent?) {
@@ -142,7 +145,7 @@ class OsActivity : FragmentActivity() {
         }
     }
 
-    override fun onStart() {
+    override fun onStart() = with(binding) {
         super.onStart()
         ivCircle.visibility = View.VISIBLE
     }
@@ -159,16 +162,16 @@ class OsActivity : FragmentActivity() {
     }
 
 
-    fun osChanged(event: ChangeOSEvent?) {
-        tvName!!.text = event!!.name
+    fun osChanged(event: ChangeOSEvent?) = with(binding) {
+        tvName.text = event!!.name
         when (event.colorVariant) {
-            1 -> ivBackground!!.setImageResource(R.drawable.pastel_background)
-            2 -> ivBackground!!.setImageResource(R.drawable.blue_fabric)
-            else -> ivBackground!!.setImageResource(R.drawable.blue_fabric)
+            1 -> ivBackground.setImageResource(R.drawable.pastel_background)
+            2 -> ivBackground.setImageResource(R.drawable.blue_fabric)
+            else -> ivBackground.setImageResource(R.drawable.blue_fabric)
         }
     }
 
-    fun onGCMConnected(event: GCMConnectedEvent) {
+    fun onGCMConnected(event: GCMConnectedEvent) = with(binding) {
         if (event.id != null) {
             tvIP.text = Utils.getIPAddress(true) + "\n" + event.id.name
         }
