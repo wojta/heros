@@ -1,6 +1,7 @@
 package cz.sazel.android.heros_control.viewmodel
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -58,6 +59,7 @@ class ControlVM(val app: Application) : AndroidViewModel(app) {
                     fn.invoke(request)
                     lastCommandLD.postValue("${app.getString(R.string.lastCmd)}\n$text")
                 } catch (e: IOException) {
+                    e.printStackTrace()
                     lastCommandLD.postValue(app.getString(R.string.connectionError))
                 } finally {
                     buttonsEnabledLiveData.postValue(true)
@@ -78,5 +80,9 @@ class ControlVM(val app: Application) : AndroidViewModel(app) {
         sendRequest({
             otherEvent(type.name)
         }, "Other(${type.name})")
+    }
+
+    companion object {
+        const val TAG="ControlVM"
     }
 }

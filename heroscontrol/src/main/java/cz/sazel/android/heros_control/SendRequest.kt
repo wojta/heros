@@ -4,12 +4,11 @@ import android.util.Log
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
-
 import java.io.IOException
 import java.io.OutputStreamWriter
+import java.io.PrintWriter
 import java.net.Socket
 import java.net.URL
-
 import javax.net.ssl.HttpsURLConnection
 
 /**
@@ -55,25 +54,26 @@ class SendRequest(private val mId: Id) {
 
     @Throws(IOException::class, JSONException::class)
     private fun sendRequest(json: JSONObject) {
-        val ow: OutputStreamWriter
+        val pw: PrintWriter
         var connection: HttpsURLConnection? = null
         var socket: Socket? = null
-        Log.i(TAG,"<==== Sending request ${json.toString(2)}")
+        Log.i(TAG, "<==== Sending request ${json.toString(2)}")
         if (!mId.isIp) {
             connection = connect()
-            ow = OutputStreamWriter(connection.outputStream)
+            pw = PrintWriter(OutputStreamWriter(connection.outputStream))
         } else {
             socket = Socket(mId.id.trim { it <= ' ' }, 12345)
-            ow = OutputStreamWriter(socket.getOutputStream())
+            pw = PrintWriter(OutputStreamWriter(socket.getOutputStream()))
         }
-        ow.write(if (mId.isIp) json.getJSONObject("data").toString() + "\n" else json.toString())
-        ow.flush()
-        ow.close()
-
-        if (connection != null && connection.responseCode != 200)
-            throw IOException("error " + connection.responseCode + ":" + connection.responseMessage)
-        socket?.close()
-        Log.i(TAG,"Send request complete ${json.toString(2)} =====>")
+        try {
+            pw.println(if (mId.isIp) json.getJSONObject("data").toString() else json.toString())
+            if (connection != null && connection.responseCode != 200)
+                throw IOException("error " + connection.responseCode + ":" + connection.responseMessage)
+        } finally {
+            pw.close()
+            socket?.close()
+        }
+        Log.i(TAG, "Send request complete ${json.toString(2)} =====>")
     }
 
     @Throws(IOException::class)
@@ -94,6 +94,6 @@ class SendRequest(private val mId: Id) {
     }
 
     companion object {
-        const val TAG="SendRequest"
+        const val TAG = "SendRequest"
     }
 }

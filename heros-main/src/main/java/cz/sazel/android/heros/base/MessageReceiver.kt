@@ -13,13 +13,13 @@ import cz.sazel.android.heros.OsActivity
  */
 class MessageReceiver : BroadcastReceiver() {
 
-    override fun onReceive(context: Context?, intent: Intent?) {
+    override fun onReceive(context: Context, intent: Intent) {
         Log.d(TAG, "message received $intent")
-        Intent(context!!, OsActivity::class.java).apply {
+        Intent(context, OsActivity::class.java).apply {
             action = Constants.ACTION_MSG_RECEIVED
             addFlags(Intent.FLAG_FROM_BACKGROUND)
             addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-            putExtras(intent?.extras ?: Bundle())
+            putExtras(intent.extras ?: Bundle())
             startActivity(context, this@apply, null)
         }
     }
