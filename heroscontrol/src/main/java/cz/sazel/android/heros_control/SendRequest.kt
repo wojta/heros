@@ -53,25 +53,30 @@ class SendRequest(private val mId: Id) {
     }
 
     @Throws(IOException::class, JSONException::class)
-    private fun sendRequest(json: JSONObject) {
-        val pw: PrintWriter
+    private fun sendRequest(json: JSONObject, attempts: Int = 3) {
+        var pw: PrintWriter? = null
         var connection: HttpsURLConnection? = null
         var socket: Socket? = null
         Log.i(TAG, "<==== Sending request ${json.toString(2)}")
-        if (!mId.isIp) {
-            connection = connect()
-            pw = PrintWriter(OutputStreamWriter(connection.outputStream))
-        } else {
-            socket = Socket(mId.id.trim { it <= ' ' }, 12345)
-            pw = PrintWriter(OutputStreamWriter(socket.getOutputStream()))
-        }
         try {
+            if (!mId.isIp) {
+                connection = connect()
+                pw = PrintWriter(OutputStreamWriter(connection.outputStream))
+            } else {
+                socket = Socket(mId.id.trim { it <= ' ' }, 12345)
+                pw = PrintWriter(OutputStreamWriter(socket.getOutputStream()))
+            }
             pw.println(if (mId.isIp) json.getJSONObject("data").toString() else json.toString())
-            if (connection != null && connection.responseCode != 200)
+            if (connection != null && connection.responseCode != 200) {
+                Log.e(TAG, "connection error")
                 throw IOException("error " + connection.responseCode + ":" + connection.responseMessage)
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+            if (attempts > 0) sendRequest(json, attempts - 1) else throw e
         } finally {
-            pw.close()
-            socket?.close()
+            pw?.close()
+            //socket?.close()
         }
         Log.i(TAG, "Send request complete ${json.toString(2)} =====>")
     }

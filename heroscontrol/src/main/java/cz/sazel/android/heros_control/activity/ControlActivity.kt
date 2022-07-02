@@ -111,7 +111,7 @@ class ControlActivity : FragmentActivity() {
     override fun onStart() {
         super.onStart()
         stopped = false
-        //viewModel.keepAlive()
+        viewModel.keepAlive()
     }
 
     override fun onStop() {
