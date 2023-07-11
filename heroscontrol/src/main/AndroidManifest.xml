@@ -1,22 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="cz.sazel.android.heros_control"
-          android:versionCode="1"
-          android:versionName="1.0">
+        package="cz.sazel.android.heros_control"
+        android:versionCode="1"
+        android:versionName="1.0">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <application
-            android:icon="@drawable/ic_launcher">
+    <uses-permission android:name="android.permission.INTERNET" />
+    <application android:icon="@drawable/ic_launcher">
         <activity
                 android:name=".activity.ControlActivity"
-                android:taskAffinity="cz.sazel.android.heros.control"
-                android:label="@string/OSControl" >
+                android:label="@string/OSControl"
+                android:taskAffinity="cz.sazel.android.heros.control">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.SelectIdActivity" android:label="@string/selectID2" />
+        <activity
+                android:name=".activity.SelectIdActivity"
+                android:label="@string/selectID2" />
+
     </application>
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.TTS_SERVICE" />
+        </intent>
+    </queries>
 </manifest>

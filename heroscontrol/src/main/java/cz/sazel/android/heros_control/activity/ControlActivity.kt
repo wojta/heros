@@ -3,8 +3,18 @@ package cz.sazel.android.heros_control.activity
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
+import android.speech.tts.TextToSpeech
+import android.util.Log
+import android.view.KeyEvent
+import android.view.KeyEvent.KEYCODE_B
+import android.view.KeyEvent.KEYCODE_F
+import android.view.KeyEvent.KEYCODE_J
+import android.view.KeyEvent.KEYCODE_L
+import android.view.KeyEvent.KEYCODE_R
+import android.view.KeyEvent.KEYCODE_SPACE
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
@@ -18,6 +28,7 @@ import cz.sazel.android.heros_control.R
 import cz.sazel.android.heros_control.SendRequest
 import cz.sazel.android.heros_control.databinding.ControlMainBinding
 import cz.sazel.android.heros_control.viewmodel.ControlVM
+import java.util.Locale
 
 class ControlActivity : FragmentActivity() {
 
@@ -25,6 +36,45 @@ class ControlActivity : FragmentActivity() {
 
     private val viewModel by lazy { ViewModelProvider(this)[ControlVM::class.java] }
     private var stopped = true
+    private val textToSpeechEngine: TextToSpeech by lazy {
+        // Pass in context and the listener.
+        TextToSpeech(this
+        ) { status ->
+            // set our locale only if init was success.
+            if (status == TextToSpeech.SUCCESS) {
+                Log.v(TAG,"TTS init success")
+                textToSpeechEngine.language = Locale.forLanguageTag("cs")
+
+            } else Log.w(TAG, "TTS initialization status=$status")
+        }
+    }
+    private val prvniOSListener: (View?) -> Unit = {
+        if (viewModel.idLiveData.value != null) {
+            viewModel.changeOs("Laura", 1)
+            textToSpeechEngine.speak("Laura", TextToSpeech.QUEUE_FLUSH, null)
+        } else {
+            idWarningToast()
+        }
+    }
+
+    private val druhyOSListener: (View?) -> Unit = {
+        if (viewModel.idLiveData.value != null) {
+            viewModel.changeOs("Robert", 2)
+            textToSpeechEngine.speak("Robert", TextToSpeech.QUEUE_FLUSH, null)
+
+        } else {
+            idWarningToast()
+        }
+    }
+
+    private val blankOSListener: (View?) -> Unit = {
+        if (viewModel.idLiveData.value != null) {
+            viewModel.otherEvent(BLANK)
+            textToSpeechEngine.speak("Zhasnout", TextToSpeech.QUEUE_FLUSH, null)
+        } else {
+            idWarningToast()
+        }
+    }
 
     /**
      * Called when the activity is first created.
@@ -34,30 +84,9 @@ class ControlActivity : FragmentActivity() {
         binding = ControlMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         with(binding) {
-            btPrvniOS.setOnClickListener {
-                if (viewModel.idLiveData.value != null) {
-                    viewModel.changeOs("Laura", 1)
-                } else {
-                    idWarningToast()
-                }
-            }
-
-            btDruheOS.setOnClickListener {
-                if (viewModel.idLiveData.value != null) {
-                    viewModel.changeOs("Robert", 2)
-
-                } else {
-                    idWarningToast()
-                }
-            }
-
-            btBlank.setOnClickListener {
-                if (viewModel.idLiveData.value != null) {
-                    viewModel.otherEvent(BLANK)
-                } else {
-                    idWarningToast()
-                }
-            }
+            btPrvniOS.setOnClickListener(prvniOSListener)
+            btDruheOS.setOnClickListener(druhyOSListener)
+            btBlank.setOnClickListener(blankOSListener)
 
             btInstall.setOnClickListener {
                 if (viewModel.idLiveData.value != null) {
@@ -89,6 +118,22 @@ class ControlActivity : FragmentActivity() {
             viewModel.buttonsEnabledLiveData.observe(this@ControlActivity, Observer { setEnableButtons(it) })
             viewModel.lastCommandLD.observe(this@ControlActivity, Observer { txLastCommand.text = it })
         }
+    }
+
+    override fun onDestroy() {
+        textToSpeechEngine.shutdown()
+        super.onDestroy()
+    }
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        Log.w(TAG, "key down: $keyCode")
+        when (keyCode) {
+            KEYCODE_F, KEYCODE_L -> prvniOSListener(null)
+            KEYCODE_R, KEYCODE_J -> druhyOSListener(null)
+            KEYCODE_B -> blankOSListener(null)
+            else -> super.onKeyDown(keyCode, event)
+        }
+        return true
     }
 
     private fun setEnableButtons(enableButtons: Boolean) = with(binding) {
@@ -156,5 +201,9 @@ class ControlActivity : FragmentActivity() {
         }
 
         super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    companion object {
+        const val TAG = "ControlActivity"
     }
 }
