@@ -15,18 +15,22 @@ import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.ProtocolException
 import java.net.URL
+import java.util.*
 
 /**
  * Created on 7/15/19.
  */
 class OsViewModel : ViewModel() {
+    private val randGen = Random()
 
     fun install(onFinished: () -> Unit) {
         viewModelScope.launch {
             installInProgressLD.postValue(true)
             for (i in 0..999) {
                 progressLiveData.postValue(i)
-                delay(20)
+                var random = randGen.nextInt(70)
+                if (random > 65) random = randGen.nextInt(400)
+                delay(random.toLong())
             }
             onFinished()
             installInProgressLD.postValue(false)

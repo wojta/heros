@@ -3,5 +3,5 @@
     <string name="OS">Operating system</string>
     <string name="app_name">heros</string>
     <string name="mustHaveQRCodeReader">ZXING compatibile QR code reader is required.</string>
-    <string name="pleaseWait">Please wait, your OS is being perpared…</string>
+    <string name="pleaseWait">Please wait, your OS is being prepared…</string>
 </resources>
